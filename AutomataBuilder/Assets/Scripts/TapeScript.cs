@@ -32,7 +32,7 @@ public class TapeScript : MonoBehaviour
     public TextMeshProUGUI inputWord;
     public TextMeshProUGUI status;
     public TextMeshProUGUI stateStatus;
-
+    
     public Slider slider;
     public Slider tapeSlider;
 
@@ -41,7 +41,7 @@ public class TapeScript : MonoBehaviour
     public float StepDelay
     {
         get { return stepDelay; }
-        set { stepDelay = Mathf.Max(value, 0.001f); }
+        set { stepDelay = Mathf.Max(value, 0.01f); }
     }
 
     private int tapeHeadLocation;
@@ -147,7 +147,14 @@ public class TapeScript : MonoBehaviour
     //Start running the TM from button press
     public void SimulateButton()
     {
-        Simulate(inputWord.text);
+        if (isRunning)
+        {
+            isRunning = false;
+        }
+        else
+        {
+            Simulate(inputWord.text);
+        }
     }
 
     //Set conditions for simulating the TM
@@ -155,6 +162,11 @@ public class TapeScript : MonoBehaviour
     {
         stateStatus.text = "";
         tapeContents = '>' + word;
+        Debug.Log(ruleBasis[5].text.Length);
+        if (ruleBasis[5].text.Length >= 2)
+        {
+            SetTapeStepSpeed(float.Parse(ruleBasis[5].text.Substring(0, ruleBasis[5].text.Length - 1), System.Globalization.CultureInfo.InvariantCulture));
+        }
         for (int i = 0; i < maxCells; i++)
         {
             transform.GetChild(0).GetChild(i).GetChild(1).GetComponent<TextMeshProUGUI>().text = " ";
@@ -174,6 +186,11 @@ public class TapeScript : MonoBehaviour
     public void SetStatus(string newStatus)
     {
         status.text = newStatus;
+    }
+
+    public void SetTapeStepSpeed(float value)
+    {
+        stepDelay = Mathf.Max(0.01f, value);
     }
 
     //Add a new transition function rule
