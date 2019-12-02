@@ -62,10 +62,11 @@ public class TapeScript : MonoBehaviour
     // Start is called before the first frame update
     void Start()
     {
+        //Create tape cells, start the head in the right place
         for (int i = 0; i < maxCells; i++)
         {
             GameObject newCell = Instantiate(tapeCell,transform.GetChild(0));
-            newCell.transform.position = new Vector3((i+1)*80, 900, 0);
+            newCell.transform.position = new Vector3(( Screen.width/ 20)*(i+1), transform.GetChild(0).transform.position.y, 0);
         }
         tapeHead = Instantiate(head,transform);
         tapeHead.transform.position = transform.GetChild(0).GetChild(1).transform.position;
@@ -93,15 +94,16 @@ public class TapeScript : MonoBehaviour
 
         bool flag = false;
 
+        //Find a matching rule for the given state and char combo
         foreach(Rule rule in rules)
         {
             if (rule.readState.Substring(0,rule.readState.Length-1) == state && rule.readChar == readChar)
             {
-
-
                 flag = true;
                 state = rule.finalState.Substring(0, rule.finalState.Length - 1);
                 SetStatus("State: " + state);
+
+                //IF we reach a finishing state, stop
                 if (state == "qacc" || state == "qrej")
                 {
                     isRunning = false;
@@ -127,7 +129,6 @@ public class TapeScript : MonoBehaviour
             isRunning = false;
             Debug.Log("No applicable rules to this situation!");
             stateStatus.text = "No applicable rules!";
-           //SetStatus("No applicable rules!");
         }
     }
 
@@ -135,7 +136,6 @@ public class TapeScript : MonoBehaviour
     {
         if (newPos <= 100 && newPos >= 0)
         {
-             
             tapeHeadLocation = newPos;
 
             tapeHead.transform.position = transform.GetChild(0).GetChild(tapeHeadLocation).transform.position;
@@ -150,6 +150,7 @@ public class TapeScript : MonoBehaviour
         Simulate(inputWord.text);
     }
 
+    //Set conditions for simulating the TM
     public void Simulate(string word)
     {
         stateStatus.text = "";
@@ -282,14 +283,12 @@ public class TapeScript : MonoBehaviour
         UpdateDisplay();
     }
 
+    //Updates display of all added rules
     public void UpdateDisplay()
     {
-        Debug.Log("Updating...");
-        Debug.Log(ruleHolder.transform.childCount);
         int total = ruleHolder.transform.childCount;
         for (int i = 0; i < total; i++)
         {
-            Debug.Log("Removing rule...");
             DestroyImmediate(ruleHolder.transform.GetChild(0).gameObject);
         }
 
@@ -308,7 +307,7 @@ public class TapeScript : MonoBehaviour
         slider.value = 0;
         slider.maxValue = Mathf.Max(0,count - 1);
 
-        SetRulePosition(0);
+        SetRulePosition(-1);
     }
 
     public void SetRulePosition(float value)
@@ -325,7 +324,7 @@ public class TapeScript : MonoBehaviour
         {
             value = tapeSlider.value;
         }
-        transform.position = new Vector3(-(-5+value) * 60, transform.position.y);
+        transform.position = new Vector3(-(-5+value) * (Screen.width / 20), transform.position.y);
 
     }
 
