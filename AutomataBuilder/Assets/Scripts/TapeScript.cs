@@ -32,6 +32,7 @@ public class TapeScript : MonoBehaviour
     public TextMeshProUGUI inputWord;
     public TextMeshProUGUI status;
     public TextMeshProUGUI stateStatus;
+    public TextMeshProUGUI simulateText;
     
     public Slider slider;
     public Slider tapeSlider;
@@ -68,6 +69,7 @@ public class TapeScript : MonoBehaviour
             GameObject newCell = Instantiate(tapeCell,transform.GetChild(0));
             newCell.transform.position = new Vector3(( Screen.width/ 20)*(i+1), transform.GetChild(0).transform.position.y, 0);
         }
+
         tapeHead = Instantiate(head,transform);
         tapeHead.transform.position = transform.GetChild(0).GetChild(1).transform.position;
     }
@@ -107,6 +109,7 @@ public class TapeScript : MonoBehaviour
                 if (state == "qacc" || state == "qrej")
                 {
                     isRunning = false;
+                    simulateText.text = "Simulate";
                 }
 
                 transform.GetChild(0).GetChild(tapeHeadLocation).GetChild(1).GetComponent<TextMeshProUGUI>().text = rule.finalChar.ToString();
@@ -127,6 +130,7 @@ public class TapeScript : MonoBehaviour
         if (flag == false)
         {
             isRunning = false;
+            simulateText.text = "Simulate";
             Debug.Log("No applicable rules to this situation!");
             stateStatus.text = "No applicable rules!";
         }
@@ -150,6 +154,7 @@ public class TapeScript : MonoBehaviour
         if (isRunning)
         {
             isRunning = false;
+            simulateText.text = "Simulate";
         }
         else
         {
@@ -160,13 +165,16 @@ public class TapeScript : MonoBehaviour
     //Set conditions for simulating the TM
     public void Simulate(string word)
     {
+        simulateText.text = "Stop";
         stateStatus.text = "";
         tapeContents = '>' + word;
-        Debug.Log(ruleBasis[5].text.Length);
+        isRunning = true;
+
         if (ruleBasis[5].text.Length >= 2)
         {
             SetTapeStepSpeed(float.Parse(ruleBasis[5].text.Substring(0, ruleBasis[5].text.Length - 1), System.Globalization.CultureInfo.InvariantCulture));
         }
+
         for (int i = 0; i < maxCells; i++)
         {
             transform.GetChild(0).GetChild(i).GetChild(1).GetComponent<TextMeshProUGUI>().text = " ";
@@ -175,10 +183,10 @@ public class TapeScript : MonoBehaviour
         {
             transform.GetChild(0).GetChild(i).GetChild(1).GetComponent<TextMeshProUGUI>().text = tapeContents[i].ToString();
         }
-        MoveMarker(1);
-        isRunning = true;
-        state = "q0";
 
+        MoveMarker(1);
+
+        state = "q0";
         SetStatus("State: q0");
     }
 
@@ -190,7 +198,18 @@ public class TapeScript : MonoBehaviour
 
     public void SetTapeStepSpeed(float value)
     {
-        stepDelay = Mathf.Max(0.01f, value);
+        if (value <= 0)
+        {
+            if (ruleBasis[5].text.Length >= 2)
+            {
+                SetTapeStepSpeed(float.Parse(ruleBasis[5].text.Substring(0, ruleBasis[5].text.Length - 1), System.Globalization.CultureInfo.InvariantCulture));
+            }
+
+        }
+        else
+        {
+            stepDelay = Mathf.Max(0.01f, value);
+        }
     }
 
     //Add a new transition function rule

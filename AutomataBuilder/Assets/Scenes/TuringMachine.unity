@@ -1241,7 +1241,7 @@ GameObject:
   - component: {fileID: 577525899}
   - component: {fileID: 577525898}
   m_Layer: 5
-  m_Name: Text
+  m_Name: FinalStateText
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -1482,7 +1482,18 @@ MonoBehaviour:
   m_CharacterLimit: 5
   m_OnEndEdit:
     m_PersistentCalls:
-      m_Calls: []
+      m_Calls:
+      - m_Target: {fileID: 762298525}
+        m_MethodName: SetTapeStepSpeed
+        m_Mode: 4
+        m_Arguments:
+          m_ObjectArgument: {fileID: 0}
+          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+          m_IntArgument: 0
+          m_FloatArgument: -1
+          m_StringArgument: 
+          m_BoolArgument: 0
+        m_CallState: 2
   m_OnSubmit:
     m_PersistentCalls:
       m_Calls: []
@@ -1786,6 +1797,7 @@ MonoBehaviour:
   inputWord: {fileID: 987798041}
   status: {fileID: 1683662616}
   stateStatus: {fileID: 1082893629}
+  simulateText: {fileID: 2063437884}
   slider: {fileID: 389929152}
   tapeSlider: {fileID: 407459847}
   tapeCell: {fileID: 576999824043485601, guid: c9c9215d886a749dbb4ccbc63d6eee8a, type: 3}
@@ -2330,7 +2342,7 @@ GameObject:
   - component: {fileID: 993495253}
   - component: {fileID: 993495252}
   m_Layer: 5
-  m_Name: Text
+  m_Name: ReadStateText
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -4915,7 +4927,7 @@ GameObject:
   - component: {fileID: 1551970072}
   - component: {fileID: 1551970071}
   m_Layer: 5
-  m_Name: Text
+  m_Name: ReadCharText
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -5526,7 +5538,7 @@ GameObject:
   - component: {fileID: 1650492401}
   - component: {fileID: 1650492400}
   m_Layer: 5
-  m_Name: Text
+  m_Name: FinalWriteText
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -6130,7 +6142,7 @@ GameObject:
   - component: {fileID: 1757285831}
   - component: {fileID: 1757285830}
   m_Layer: 5
-  m_Name: Text
+  m_Name: FinalMoveText
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -7186,7 +7198,7 @@ GameObject:
   - component: {fileID: 2063437885}
   - component: {fileID: 2063437884}
   m_Layer: 5
-  m_Name: Text (TMP)
+  m_Name: SimulateText
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -7295,7 +7307,7 @@ MonoBehaviour:
   m_firstVisibleCharacter: 0
   m_useMaxVisibleDescender: 1
   m_pageToDisplay: 1
-  m_margin: {x: 5.557378, y: 15.482718, z: 6.020393, w: 11.612084}
+  m_margin: {x: 5.557378, y: 20, z: 6.020393, w: 20}
   m_textInfo:
     textComponent: {fileID: 2063437884}
     characterCount: 9
