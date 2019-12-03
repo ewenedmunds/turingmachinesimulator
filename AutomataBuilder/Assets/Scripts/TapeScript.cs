@@ -138,12 +138,16 @@ public class TapeScript : MonoBehaviour
 
     public void MoveMarker(int newPos)
     {
-        if (newPos <= 100 && newPos >= 0)
+        if (newPos < maxCells-1 && newPos >= 0)
         {
             tapeHeadLocation = newPos;
 
             tapeHead.transform.position = transform.GetChild(0).GetChild(tapeHeadLocation).transform.position;
 
+        }
+        else
+        {
+            state = "qfail";
         }
     }
 
@@ -158,7 +162,7 @@ public class TapeScript : MonoBehaviour
         }
         else
         {
-            Simulate(inputWord.text);
+            Simulate(inputWord.text.Substring(0,inputWord.text.Length-1));
         }
     }
 
@@ -212,7 +216,7 @@ public class TapeScript : MonoBehaviour
         }
     }
 
-    //Add a new transition function rule
+    //Add a new transition function rule, then updates the display accordingly
     public void AddRule()
     {
         if (isRunning)
@@ -228,64 +232,59 @@ public class TapeScript : MonoBehaviour
             }
 
             //Construct the new rule
-            bool flag = true;
+            bool isLegitimateRule = true;
 
             string rS = ruleBasis[0].text;
-
             char rC = ' ';
-            if (ruleBasis[1].text.Length > 0)// && ruleBasis[1].text[0] != ' ')
+            string fS = ruleBasis[2].text;
+            char fC = ' ';
+            char fM = ' ';
+
+            if (ruleBasis[1].text.Length > 0)
             {
                  rC = ruleBasis[1].text[0];
             }
             else
             {
-                flag = false;
+                isLegitimateRule = false;
                 AddRuleErrorMessage("Enter a proper character to be read!");
             }
 
-            string fS = ruleBasis[2].text;
-
-            char fC = ' ';
             if (ruleBasis[3].text.Length > 0)
             {
                 fC = ruleBasis[3].text[0];
             }
-            else
-            {
-                 fC = ' ';
-            }
 
-            char fM = ' ';
             if (ruleBasis[4].text.Length > 0)
             {
                 fM = ruleBasis[4].text[0];
             }
             else
             {
-                flag = false;
+                isLegitimateRule = false;
                 AddRuleErrorMessage("Enter a final move character (L or R)!");
             }
 
 
-            if (flag == true)
+            if (isLegitimateRule == true)
             {
                 if (rS.Length <= 0)
                 {
-                    flag = false;
+                    isLegitimateRule = false;
                     AddRuleErrorMessage("Enter a state to be read!");
                 }
                 if (fS.Length <= 0)
                 {
-                    flag = false;
+                    isLegitimateRule = false;
                     AddRuleErrorMessage("Enter a final state to be entered!");
                 }
                 if (fM != 'R' && fM != 'r' && fM != 'L' && fM != 'l')
                 {
-                    flag = false;
+                    isLegitimateRule = false;
                     AddRuleErrorMessage("Enter 'R' or 'L' for the final move!");
                 }
 
-                if (flag)
+                if (isLegitimateRule)
                 {
                     newRules[rules.Length] = new Rule(rS, rC, fS, fC, fM);
 
@@ -301,6 +300,8 @@ public class TapeScript : MonoBehaviour
         }
     }
 
+
+    //Removes the rule stored at position ruleIndex, then updates the display accordingly
     public void RemoveRule(int ruleIndex)
     {
         Rule[] newRules = new Rule[rules.Length - 1];
