@@ -87,7 +87,7 @@ public class TapeScript : MonoBehaviour
             }
         }
     }
-
+   
 
     //Read state, char combo, try and move on
     public void TapeStep()
